@@ -2,11 +2,10 @@ package com.ahoubouby
 
 object Main extends App {
 
-  import com.ahoubouby.typeclass_.{Json, Person}
-  import com.ahoubouby.typeclass_.Person._
+  import akka.actor.ActorSystem
+  import com.typesafe.config.ConfigFactory
 
-  val person = Person(name = "abdelwahed", email = "ahoubouby@gmail.com")
-  val writePersonJson = Json.toJson(person)
-  println(writePersonJson)
+  val seedConfig = ConfigFactory.load("seed")
+  val seedSystem = ActorSystem("words", seedConfig)
 
 }
