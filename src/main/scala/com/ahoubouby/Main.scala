@@ -14,16 +14,18 @@ object Main extends App {
   val system = ActorSystem("words", config)
 
   println(s"Starting node with roles: ${Cluster(system).selfRoles}")
-  val text = List(
-    "this is a test",
-    "of some very naive word counting",
-    "but what can you say",
-    "it is what it is"
-  )
 
   if (system.settings.config
         .getStringList("akka.cluster.roles")
         .contains("master")) {
+
+    val text = List(
+      "this is a test",
+      "of some very naive word counting",
+      "but what can you say",
+      "it is what it is"
+    )
+
     Cluster(system).registerOnMemberUp {
       val receptionist = system.actorOf(JobReceptionist.props, JobReceptionist.name)
       println("Master node is ready.")
@@ -32,11 +34,15 @@ object Main extends App {
         "the first job",
         (1 to 100000).flatMap(i => text ++ text).toList
       )
-      system.actorOf(
-        ClusterDomainEventListener.props,
-        ClusterDomainEventListener.name
-      )
+
     }
+  }
+  if (Cluster(system).selfRoles.contains("seed")) {
+    println("create cluster domaine event listener")
+    system.actorOf(
+      ClusterDomainEventListener.props,
+      ClusterDomainEventListener.name
+    )
   }
 
 }
