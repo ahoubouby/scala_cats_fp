@@ -40,12 +40,12 @@ class JobMaster extends Actor with ActorLogging with CreateWorkerRouter {
     case StartJob(jobName, text) =>
       textParts = text.grouped(10).toVector
       val cancellable = context.system.scheduler.scheduleAtFixedRate(
-        0 millis,
-        1000 millis,
+        0.millis,
+        1000.millis,
         router,
         Work(jobName, self)
       )
-      context.setReceiveTimeout(60 seconds)
+      context.setReceiveTimeout(60.seconds)
       become(working(jobName, sender, cancellable))
   }
 

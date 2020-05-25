@@ -30,7 +30,7 @@ class JobWorker extends Actor with ActorLogging {
       master ! NextTask
       watch(master)
 
-      setReceiveTimeout(30 seconds)
+      setReceiveTimeout(30.seconds)
   }
 
   def enlisted(jobName: String, master: ActorRef): Receive = {
@@ -61,12 +61,11 @@ class JobWorker extends Actor with ActorLogging {
     case _ => log.error("I'm retired.")
   }
 
-  def processTask(textPart: List[String]): Map[String, Int] = {
+  def processTask(textPart: List[String]): Map[String, Int] =
     textPart
       .flatMap(_.split("\\W+"))
       .foldLeft(Map.empty[String, Int]) { (count, word) =>
         if (word == "FAIL") throw new RuntimeException("SIMULATED FAILURE!")
         count + (word -> (count.getOrElse(word, 0) + 1))
       }
-  }
 }
