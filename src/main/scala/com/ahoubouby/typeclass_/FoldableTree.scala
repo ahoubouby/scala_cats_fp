@@ -13,6 +13,6 @@ object FoldableTree extends Foldable[Tree] {
 
   override def foldMap[A, B](as: Tree[A])(f: A => B)(mb: Monoid[B]): B = as match {
     case Leaf(a)      => f(a)
-    case Branch(l, r) => mb.op(foldMap(l)(f)(mb), foldMap(r)(f)(mb))
+    case Branch(l, r) => mb.op(foldMap(r)(f)(mb), foldMap(l)(f)(mb))
   }
 }
