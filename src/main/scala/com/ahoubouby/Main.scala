@@ -20,5 +20,6 @@ object Main extends App {
   println(resultFolding)
   println(resultLeftFolding)
   println(resultMapFolding)
+  println(FoldableTree.toList(tree))
 
 }
