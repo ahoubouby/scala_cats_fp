@@ -8,6 +8,9 @@ object Main extends App {
     override def map[A, B](fa: List[A])(f: A => B): List[B] = fa.map(f)
   }
 
+  def map2[A, B, C](fa: Option[A], fb: Option[B])(f: (A, B) => C): Option[C] =
+    fa.flatMap(a => fb map (b => f(a, b)))
+
   val optionMap = new Functor[Option] {
     override def map[A, B](fa: Option[A])(f: A => B): Option[B] = fa match {
       case Some(value) => Some(f(value))
@@ -15,15 +18,12 @@ object Main extends App {
     }
   }
 
-  val list              = List(1, 3, 4, 4)
-  val listString        = List("abde", "houboub", "hihi", "dd")
-  val option: Option[_] = None
-  // F[A] zip F[B] => F[(A,B)]
-  val zip = list.zip(listString)
-  println(zip)
-  // F[A,B] unzip => (F[A],F[B])
-  println(zip.unzip)
-  println(listFunctor.distribute(zip))
-  println(optionMap.map(option)(identity))
+  val optionA = Some(3)
+  val optionB: Option[Int] = None
+
+  val resultOfMap2 = map2(optionA, optionB) { (a, b) =>
+    b - a
+  }
+  println(resultOfMap2)
 
 }
