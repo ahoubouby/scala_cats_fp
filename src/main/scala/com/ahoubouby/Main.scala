@@ -19,7 +19,7 @@ object Main extends App {
   }
 
   val optionA = Some(3)
-  val optionB: Option[Int] = None
+  val optionB = Some(33)
 
   val resultOfMap2 = map2(optionA, optionB) { (a, b) =>
     b - a

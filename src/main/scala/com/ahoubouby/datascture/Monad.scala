@@ -7,3 +7,26 @@ trait Monad[F[_]] extends Functor[F] {
   def map2[A, B, C](ma: F[A], mb: F[B])(f: (A, B) => C): F[C] =
     flatMap(ma)(a => map(mb)(b => f(a, b)))
 }
+
+object Monad extends App {
+  val monadOption: Monad[Option] = new Monad[Option] {
+    override def unit[A](a: => A): Option[A] = Some(a)
+
+    override def flatMap[A, B](ma: Option[A])(f: A => Option[B]): Option[B] =
+      ma.flatMap(f)
+  }
+
+  val monadList: Monad[List] = new Monad[List] {
+    override def unit[A](a: => A): List[A] = List(a)
+    override def flatMap[A, B](ma: List[A])(f: A => List[B]): List[B] =
+      ma.flatMap(f)
+  }
+
+  val monadStream: Monad[LazyList] = new Monad[LazyList] {
+    override def unit[A](a: => A): LazyList[A] = LazyList(a)
+
+    override def flatMap[A, B](ma: LazyList[A])(f: A => LazyList[B]) =
+      ma.flatMap(f)
+  }
+
+}
