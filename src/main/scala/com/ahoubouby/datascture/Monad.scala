@@ -6,6 +6,8 @@ trait Monad[F[_]] extends Functor[F] {
   def map[A, B](ma: F[A])(f: A => B): F[B] = flatMap(ma)(a => unit(f(a)))
   def map2[A, B, C](ma: F[A], mb: F[B])(f: (A, B) => C): F[C] =
     flatMap(ma)(a => map(mb)(b => f(a, b)))
+
+  def flatten[A](mma: F[F[A]]): F[A] = flatMap(mma)(x => x)
 }
 
 object Monad extends App {
