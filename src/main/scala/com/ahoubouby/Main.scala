@@ -24,6 +24,5 @@ object Main extends App {
   val resultOfMap2 = map2(optionA, optionB) { (a, b) =>
     b - a
   }
-  println(resultOfMap2)
 
 }
