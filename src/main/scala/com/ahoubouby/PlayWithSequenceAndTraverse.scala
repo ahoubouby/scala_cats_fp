@@ -16,8 +16,9 @@ object PlayWithSequenceAndTraverse {
     } yield f(aa, bb)
 
   def sequence[A](list: List[Option[A]]): Option[List[A]] = list match {
-    case Nil    => Some(Nil)
     case h :: t => h.flatMap(hh => sequence(t).map(hh :: _))
+    case Nil    => Some(Nil)
+
   }
 
   sequence(list.map(parseInt))
