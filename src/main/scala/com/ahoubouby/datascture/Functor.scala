@@ -1,15 +1,18 @@
 package com.ahoubouby.datascture
+import scala.language.higherKinds
 
-trait Functor[F[_]] {
+import cats.instances.function._ // for functor
+import cats.syntax.functor._ // for map
 
-  def map[A, B](fa: F[A])(f: A => B): F[B]
+object Functor extends App {
 
-  def distribute[A, B](fab: F[(A, B)]): (F[A], F[B]) =
-    (map(fab)(_._1), map(fab)(_._2))
+  import cats.Functor
+  import cats.instances.option._
 
-  def codistribute[A, B](e: Either[F[A], F[B]]): F[Either[A, B]] = e match {
-    case Left(fa)  => map(fa)(Left(_))
-    case Right(fb) => map(fb)(Right(_))
-  }
+  def doMah[F[_]](start: F[Int])(implicit functor: Functor[F]): F[Int] =
+    start.map(x => (x + 1) * 2)
+
+  val option: Option[Int] = Some(3)
+  println(doMah(option))
 
 }

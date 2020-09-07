@@ -4,7 +4,7 @@ import com.ahoubouby.datascture.Functor
 
 object Main extends App {
 
-  val listFunctor = new Functor[List] {
+  /*val listFunctor = new Functor[List] {
     override def map[A, B](fa: List[A])(f: A => B): List[B] = fa.map(f)
   }
 
@@ -16,7 +16,9 @@ object Main extends App {
       case Some(value) => Some(f(value))
       case None        => None
     }
-  }
+  }*/
+  def map2[A, B, C](fa: Option[A], fb: Option[B])(f: (A, B) => C): Option[C] =
+    fa.flatMap(a => fb map (b => f(a, b)))
 
   val optionA = Some(3)
   val optionB = Some(33)
