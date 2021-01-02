@@ -29,7 +29,12 @@ object imap extends App {
   implicit val intCodec: Codec[Int] = stringCodec.imap(_.toInt, _.toString)
   implicit def boxCodec[A](implicit c: Codec[A]): Codec[Box[A]] =
     c.imap(Box(_), _.value)
+  def encode[A](value: A)(implicit codec: Codec[A]): String =
+    codec.encode(value)
+  def decode[A](value: String)(implicit codec: Codec[A]) = codec.decode(value)
 
-  val box: Box[String] = Box("string inside box")
-  println(boxCodec[String].decode("string come from outside"))
+  val box: Box[Int] = Box(232342)
+  println(encode(box))
+  // no exception management here
+  println(decode[Box[String]]("23232"))
 }
